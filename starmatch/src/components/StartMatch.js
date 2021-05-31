@@ -5,6 +5,19 @@ import PlayNumber from './PlayNumber';
 
 const StarMatch = () => {
   const [stars, setState] = useState(utils.random(1, 9));
+  const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
+  const [candidateNums, setCandidateNums] = useState([]);
+
+  const statusNumber = (number) => {
+    if (!availableNums.includes(number)) {
+      return 'used';
+    }
+    if (candidateNums.includes(number)) {
+      return utils.sum(candidateNums) > stars ? 'wrong' : 'candidate';
+    }
+    return 'available';
+  };
+
   return (
     <div className='game'>
       <div className='help'>
@@ -18,7 +31,11 @@ const StarMatch = () => {
         </div>
         <div className='right'>
           {utils.range(1, 9).map((number) => (
-            <PlayNumber key={number} numbers={number} />
+            <PlayNumber
+              key={number}
+              status={statusNumber(number)}
+              numbers={number}
+            />
           ))}
         </div>
       </div>
